@@ -1,4 +1,5 @@
 from ultralytics import YOLO
+from ultralytics import RTDETR
 from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
 
@@ -11,8 +12,10 @@ def load_model(model_name: str = "yolov8n.pt"):
 
 def load_sahi_model(
     model_name: str = "yolov8n.pt",
+    model_type:str = "yolov8",
     confidence_threshold: float = 0.27,
     device: str = "cpu"
+
 ):
     """
     Load a YOLOv8 model wrapped for SAHI sliced inference.
@@ -26,14 +29,14 @@ def load_sahi_model(
         SAHI-compatible detection model.
     """
     return AutoDetectionModel.from_pretrained(
-        model_type="yolov8",
+        model_type=model_type,
         model_path=model_name,
         confidence_threshold=confidence_threshold,
         device=device
     )
 
 
-def detect_people(model, frame, conf_threshold: float = 0.3, imgsz: int = 640):
+def detect_people(model, frame, conf_threshold: float = 0.41, imgsz: int = 640):
     """Run inference and return only person detections (class 0)."""
     results = model(frame, imgsz=imgsz, verbose=False)
     boxes = []
@@ -52,6 +55,7 @@ def detect_people_sahi(
     slice_height: int = 640,
     slice_width: int = 640,
     overlap_ratio: float = 0.2
+
 ):
     """
     Run SAHI sliced inference and return only person detections as list of (xyxy, confidence).
@@ -73,7 +77,8 @@ def detect_people_sahi(
         slice_width=slice_width,
         overlap_height_ratio=overlap_ratio,
         overlap_width_ratio=overlap_ratio,
-        postprocess_match_threshold=conf_threshold  # helps reduce duplicates
+        postprocess_match_threshold=conf_threshold,  # helps reduce duplicates
+        verbose = 0
     )
 
     boxes = []
