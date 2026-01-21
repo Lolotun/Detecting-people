@@ -1,6 +1,24 @@
 Репозиторий содержит решение задачи детекции людей на видео с использованием современных моделей компьютерного зрения. 
 Поддерживается три режима работы: базовый YOLOv8, YOLOv8 + SAHI и RT-DETR + SAHI.
 
+Рекомендуется создать виртульное окружение
+python -m venv venv
+source venv/bin/activate      # Linux/Mac
+# или
+venv\Scripts\activate        # Windows
 
-python -m src.main
-python src/detect_people.py --video ./crowd_5s.mp4 --mode 1 
+pip install -r requirements.txt
+
+Для запуска необходимо ввести одну из следующих команд 
+Также указывается путь до видео - рекомендую усеченную версию, в силу скорости
+
+# Режим 1: YOLOv8n (быстро, ~20 мс/кадр)
+python -m src.main --video ./crowd_5s.mp4 --mode 1 
+
+# Режим 2: SAHI + YOLOv8m (лучше мелкие объекты, ~1 с/кадр)
+python -m src.main --video ./crowd_5s.mp4 --mode 2 
+
+# Режим 3: SAHI + RT-DETR (наиболее точный, ~2.0 с/кадр)
+python s-m src.main  --video ./crowd_5s.mp4 --mode 3 
+
+Если ffmpeg не установлен, результат сохранится как .avi
