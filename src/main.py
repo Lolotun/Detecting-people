@@ -25,7 +25,7 @@ def main():
     out = create_video_writer(output_video_path, fps, width, height)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    device = "cpu"
+
     if args.mode == 1:
         model =load_model("yolov8n.pt")
         use_sahi = False
